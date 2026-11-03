@@ -9,8 +9,8 @@ Android device running Android 5.0+ with the system WebView.
 
 ## What it does
 
-- Shows `https://playtime.tarung.space/d/lounge` in a fullscreen WebView with no
-  browser UI.
+- Shows `https://playtime.tarung.space/d/{station}` (default `lounge`) in a
+  fullscreen WebView with no browser UI.
 - Starts automatically when the TV boots, and comes back to the front when the
   TV wakes from standby.
 - Keeps the screen on while it's showing, so the screensaver and screen-off
@@ -18,6 +18,8 @@ Android device running Android 5.0+ with the system WebView.
 - If the network isn't up yet (common right after boot), shows a dark screen and
   retries every 10 seconds.
 - Back does nothing on the page. Press **Home** on the remote to leave the kiosk.
+- Press **OK** on the remote 5 times quickly (or tap the screen 5 times) to open
+  settings and switch to another station.
 
 No browser needs to be installed on the TV.
 
@@ -69,12 +71,22 @@ This produces `playtime.apk`.
 
    If more than one device is connected, set `ANDROID_SERIAL=<tv-ip>:<port>` first.
 
-## Change the URL
+## Change the station
 
-Edit `URL` in
+The app shows `https://playtime.tarung.space/d/{station}`, starting with `lounge`.
+
+1. Press **OK** on the remote 5 times within 3 seconds (or tap 5 times on a
+   touchscreen). A **Station** dialog opens.
+2. Type the station name, for example `lobby`. Pasting `/d/lobby` or the full
+   link also works; only the last part is kept.
+3. Choose **Save**. The page reloads, and the station is remembered across
+   reboots. **Cancel** or Back leaves it unchanged.
+
+To change the site itself, edit `BASE_URL` (and `DEFAULT_STATION` for fresh
+installs) in
 [`src/space/tarung/lounge/MainActivity.java`](src/space/tarung/lounge/MainActivity.java),
 then run `./build.sh install` again. Installing over the existing app keeps its
-permissions.
+permissions and the saved station.
 
 ## How auto-start works
 
@@ -89,7 +101,8 @@ over adb in two ways:
 
 ## Notes
 
-- **Wireless debugging turns off after a reboot** on this TV. You only need it to
+- **Wireless debugging turns off after a reboot** on this TV, and sometimes on
+  its own after a while. You only need it to
   install updates, not for the kiosk to run. The pairing is remembered, so just
   switch it back on; no new code needed.
 - **Don't force-stop the app** from the TV's app settings. Android won't start a
@@ -101,7 +114,7 @@ over adb in two ways:
 
 ```
 AndroidManifest.xml                          app name, permissions, boot receiver
-src/space/tarung/lounge/MainActivity.java    fullscreen WebView, retry, keep-awake
+src/space/tarung/lounge/MainActivity.java    fullscreen WebView, retry, keep-awake, station settings
 src/space/tarung/lounge/BootReceiver.java    opens MainActivity after boot
 build.sh                                     build (and optionally install) without Gradle
 ```
