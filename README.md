@@ -1,7 +1,7 @@
 # Playtime Kiosk
 
 A tiny Android TV app that turns a TV into a dedicated display for
-[Playtime](https://playtime.tarung.space/d/lounge). It opens the lounge page
+[Playtime](https://playtime.tarung.space/d/lounge). It opens the Playtime page
 fullscreen, keeps it there, and comes back on its own after a reboot.
 
 Built for a Mi TV (Google TV, Android 14), but it works on any Android TV or
@@ -84,7 +84,7 @@ The app shows `https://playtime.tarung.space/d/{station}`, starting with `lounge
 
 To change the site itself, edit `BASE_URL` (and `DEFAULT_STATION` for fresh
 installs) in
-[`src/space/tarung/lounge/MainActivity.java`](src/space/tarung/lounge/MainActivity.java),
+[`src/playtime/app/MainActivity.java`](src/playtime/app/MainActivity.java),
 then run `./build.sh install` again. Installing over the existing app keeps its
 permissions and the saved station.
 
@@ -107,14 +107,15 @@ over adb in two ways:
   switch it back on; no new code needed.
 - **Don't force-stop the app** from the TV's app settings. Android won't start a
   force-stopped app at boot until it's opened by hand once.
-- The package ID is `space.tarung.lounge` (the app's first name). The TV shows
-  it as **Playtime**. Changing the ID would install it as a separate app.
+- The package ID is `playtime.app`, matching the **Playtime** app name.
+  Devices with the old package ID (`space.tarung.lounge`) will treat this as a
+  separate app; uninstall the old app after installing this one if desired.
 
 ## Project layout
 
 ```
 AndroidManifest.xml                          app name, permissions, boot receiver
-src/space/tarung/lounge/MainActivity.java    fullscreen WebView, retry, keep-awake, station settings
-src/space/tarung/lounge/BootReceiver.java    opens MainActivity after boot
+src/playtime/app/MainActivity.java           fullscreen WebView, retry, keep-awake, station settings
+src/playtime/app/BootReceiver.java           opens MainActivity after boot
 build.sh                                     build (and optionally install) without Gradle
 ```

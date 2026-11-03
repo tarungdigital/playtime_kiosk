@@ -1,4 +1,4 @@
-package space.tarung.lounge;
+package playtime.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;

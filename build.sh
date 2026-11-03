@@ -8,7 +8,7 @@ cd "${0:A:h}"
 SDK="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
 BT="$SDK/build-tools/35.0.0"
 JAR="$SDK/platforms/android-34/android.jar"
-PKG=space.tarung.lounge
+PKG=playtime.app
 
 rm -rf build && mkdir -p build/classes build/dex
 
