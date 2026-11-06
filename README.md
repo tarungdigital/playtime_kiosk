@@ -82,7 +82,8 @@ install it. Then turn on auto-start by hand:
 
 If the switch is greyed out with a *Restricted setting* message, go to
 **Settings → Apps → Playtime**, choose **Allow restricted settings**, and try
-again.
+again. If the switch turns itself back off, Android 13+ is blocking it for a
+downloaded app and the TV has no button to allow it. Use adb once instead.
 
 ## Change the station
 
@@ -117,6 +118,16 @@ app with a switched-on accessibility service open screens from the background,
 and the service opens the kiosk as soon as it starts, which happens at boot. It
 declares no event types and no window access, so it can't read the screen or
 key presses.
+
+Some cheap boxes (seen on a HiSilicon box sold as "onn STICK", Android 9) only
+send the boot signal to their own built-in apps, so `BootReceiver` never runs.
+Android still starts accessibility services at boot, so switch the service on
+over adb:
+
+```bash
+adb shell settings put secure enabled_accessibility_services playtime.app/playtime.app.AutoStartService
+adb shell settings put secure accessibility_enabled 1
+```
 
 ## Notes
 
