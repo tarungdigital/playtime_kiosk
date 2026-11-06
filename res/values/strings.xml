@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="autostart_description">Opens Playtime when the TV starts or wakes up. It doesn\'t read the screen or what you press.</string>
+</resources>

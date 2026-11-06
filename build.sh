@@ -12,8 +12,9 @@ PKG=playtime.app
 
 rm -rf build && mkdir -p build/classes build/dex
 
+"$BT/aapt2" compile --dir res -o build/res.zip
 "$BT/aapt2" link -o build/unsigned.apk -I "$JAR" --manifest AndroidManifest.xml \
-  --min-sdk-version 21 --target-sdk-version 34
+  --min-sdk-version 21 --target-sdk-version 34 build/res.zip
 javac -source 8 -target 8 -bootclasspath "$JAR" -Xlint:-options -d build/classes $(find src -name '*.java')
 "$BT/d8" --release --min-api 21 --lib "$JAR" --output build/dex $(find build/classes -name '*.class')
 (cd build/dex && zip -q -u ../unsigned.apk classes.dex)

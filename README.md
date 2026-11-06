@@ -71,6 +71,19 @@ This produces `playtime.apk`.
 
    If more than one device is connected, set `ANDROID_SERIAL=<tv-ip>:<port>` first.
 
+### Without adb
+
+If Wireless debugging won't turn on, download `playtime.apk` on the TV and
+install it. Then turn on auto-start by hand:
+
+1. Open **Playtime** once from the Apps row.
+2. Go to **Settings → System → Accessibility → Playtime**, switch it on, and
+   accept the warning. The kiosk opens straight away.
+
+If the switch is greyed out with a *Restricted setting* message, go to
+**Settings → Apps → Playtime**, choose **Allow restricted settings**, and try
+again.
+
 ## Change the station
 
 The app shows `https://playtime.tarung.space/d/{station}`, starting with `lounge`.
@@ -99,6 +112,12 @@ over adb in two ways:
 - `appops set ... allow`: the app-op. Google TV resets this one on reboot, which
   is why the `pm grant` is needed.
 
+Without adb, the app's accessibility service does the same job. Android lets an
+app with a switched-on accessibility service open screens from the background,
+and the service opens the kiosk as soon as it starts, which happens at boot. It
+declares no event types and no window access, so it can't read the screen or
+key presses.
+
 ## Notes
 
 - **Wireless debugging turns off after a reboot** on this TV, and sometimes on
@@ -114,8 +133,10 @@ over adb in two ways:
 ## Project layout
 
 ```
-AndroidManifest.xml                          app name, permissions, boot receiver
+AndroidManifest.xml                          app name, permissions, boot receiver, auto-start service
 src/playtime/app/MainActivity.java           fullscreen WebView, retry, keep-awake, station settings
 src/playtime/app/BootReceiver.java           opens MainActivity after boot
+src/playtime/app/AutoStartService.java       accessibility service for auto-start without adb
+res/xml/autostart.xml                        accessibility service config (no events, no window access)
 build.sh                                     build (and optionally install) without Gradle
 ```
